@@ -1,0 +1,26 @@
+.links {
+  /* width: 70vw; */
+  background-color: hsl(306, 80%, 15%);
+  margin: 10vh auto;
+}
+.visual {
+  font-size: 100px;
+  height: 70vh;
+  line-height: 90px;
+  color: #ffffff;
+}
+.buttons {
+  margin-top: 10px;
+  width: 100%;
+}
+.buttons a {
+  border-radius: 0;
+  color: #fff;
+  font-size: 25px;
+  transition: background-color 0.2s, box-shadow 0.5s;
+}
+.buttons a:hover {
+  color: #fff;
+  background-color: hsl(306, 80%, 30%);
+  box-shadow: 0px 0px 3px 0px black;
+}
