@@ -33,7 +33,6 @@ if (userstack.count === 0) {
 } else {
   Stack.innerHTML = "";
   Height = wrapper.clientHeight;
-  console.log(Height);
   textSize =
     Height / userstack.count > 50 ? 25 : 25 * (Height / userstack.count / 50);
   for (var i = userstack.count - 1; i >= 0; i--) {
@@ -41,7 +40,6 @@ if (userstack.count === 0) {
     element.style.fontSize = `${textSize}px`;
     element.innerText = userstack.storage[i];
     Stack.appendChild(element);
-    console.log(i);
   }
 }
 
@@ -55,7 +53,6 @@ function addStackElement() {
   } else {
     Stack.innerHTML = "";
     Height = wrapper.clientHeight;
-    console.log(Height);
     textSize =
       Height / userstack.count > 50 ? 25 : 25 * (Height / userstack.count / 50);
     for (var i = userstack.count - 1; i >= 0; i--) {
@@ -67,7 +64,6 @@ function addStackElement() {
       }
       element.innerText = userstack.storage[i];
       Stack.appendChild(element);
-      console.log(i);
     }
   }
   input.value = "";
@@ -95,7 +91,6 @@ function removeStackElement() {
       element.style.fontSize = `${textSize}px`;
       element.innerText = userstack.storage[i];
       Stack.appendChild(element);
-      console.log(i);
     }
   }
 }
