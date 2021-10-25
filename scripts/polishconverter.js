@@ -82,10 +82,6 @@ function priority(operator) {
   return undefined;
 }
 
-exports.priority = priority;
-
-expressions;
-
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -131,7 +127,7 @@ async function infixToPostfix(infix) {
       postfix += infix[i];
     }
     resultText.innerText = postfix;
-    await sleep(1500);
+    await sleep(1000);
   }
   while (convertStack.count !== 0) {
     postfix += await convertStack.pop();
@@ -144,61 +140,83 @@ async function infixToPostfix(infix) {
   return postfix;
 }
 
-testExp = "(a+b)";
-infixToPostfix(testExp);
-
-exports.intopost = infixToPostfix;
-
 function reverseExpression(exp) {
-  reverse = "";
-  for (var i = exp.length - 1; i >= 0; i--) {
-    if (exp[i] == "(") {
-      reverse += ")";
-      continue;
-    }
-    if (exp[i] == ")") {
-      reverse += "(";
-      continue;
-    }
-    temp = "";
-    while (exp[i] >= "0" && exp[i] <= "9") {
-      temp += exp[i];
-      i--;
-    }
-    if (temp !== "") {
-      i++;
-      reverse += temp.split("").reverse().join("");
-      continue;
-    }
-    reverse += exp[i];
+  var str = "";
+  var end = exp.length - 1;
+  while (end >= 0) {
+    str += exp[end];
+    end--;
   }
-  return reverse;
+  return str;
 }
 
-function infixToPrefix(infix) {
-  reverseInfix = reverseExpression(infix);
-  postfix = "";
-  for (i in infix) {
-    if (infix[i] === "(") {
-      convertStack.push(infix[i]);
-    } else if (["+", "-", "*", "/", "^"].includes(infix[i])) {
-      var pri = priority(infix[i]);
-      while (pri <= priority(convertStack.peek())) {
-        postfix += convertStack.pop();
-      }
-      convertStack.push(infix[i]);
-    } else if (infix[i] === ")") {
-      while (convertStack.peek() !== "(") {
-        postfix += convertStack.pop();
-      }
-      convertStack.pop();
-    } else {
-      postfix += infix[i];
+async function infixToPrefix(infix) {
+  infix = input.value;
+  var len = infix.length;
+  revinfix = reverseExpression(infix);
+  let inarr = revinfix.split("");
+  for (var i = 0; i < len; i++) {
+    if (inarr[i] == "(") {
+      inarr[i] = ")";
+    } else if (inarr[i] == ")") {
+      inarr[i] = "(";
     }
+    i++;
+  }
+  revinfix = inarr.join("");
+  console.log(revinfix);
+
+  convertStack.reset();
+  exp.innerHTML = "";
+  for (i in infix) {
+    var element = document.createElement("div");
+    element.classList.add("expression");
+    element.style.fontSize = `${textSize}px`;
+    element.style.width = `7%`;
+    element.id = `${i}`;
+    element.innerText = infix[i];
+    exp.appendChild(element);
+  }
+  postfix = "";
+  expressions = document.getElementsByClassName("expression");
+  for (
+    i = 0, revi = infix.length - 1;
+    i < infix.length, revi >= 0;
+    i++, revi--
+  ) {
+    for (ele of expressions) {
+      ele.classList.remove("active");
+    }
+    var active = document.getElementById(`${revi}`);
+    active.classList.add("active");
+    console.log(revinfix[i]);
+    if (revinfix[i] === "(") {
+      console.log("work");
+      convertStack.push(revinfix[i]);
+    } else if (["+", "-", "*", "/", "^"].includes(revinfix[i])) {
+      var pri = priority(revinfix[i]);
+      while (pri <= priority(convertStack.peek())) {
+        postfix = (await convertStack.pop()) + postfix;
+      }
+      convertStack.push(revinfix[i]);
+    } else if (revinfix[i] === ")") {
+      while (convertStack.peek() !== "(") {
+        postfix = (await convertStack.pop()) + postfix;
+      }
+      await convertStack.pop();
+    } else {
+      postfix = revinfix[i] + postfix;
+    }
+    resultText.innerText = postfix;
+    await sleep(1000);
   }
   while (convertStack.count !== 0) {
-    postfix += convertStack.pop();
+    postfix = (await convertStack.pop()) + postfix;
+    resultText.innerText = postfix;
   }
-  prefix = reverseExpression(postfix);
-  console.log(prefix);
+  for (ele of expressions) {
+    ele.classList.remove("active");
+  }
+
+  return postfix;
 }
